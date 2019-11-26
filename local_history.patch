@@ -1,0 +1,201 @@
+Index: src/com/group6/TollGate.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/com/group6/TollGate.java	(date 1574592626653)
++++ src/com/group6/TollGate.java	(date 1574592626653)
+@@ -4,9 +4,7 @@
+ import javax.swing.border.LineBorder;
+ import javax.swing.border.MatteBorder;
+ import java.awt.*;
+-import java.awt.event.MouseEvent;
+-import java.awt.event.MouseListener;
+-import java.awt.event.MouseMotionListener;
++import java.awt.event.*;
+ import java.util.ArrayList;
+ import static com.group6.Fonts.*;
+ import static com.group6.Colors.*;
+@@ -19,6 +17,8 @@
+ * */
+ public class TollGate extends  JFrame{
+     int mousePressedX;
++   // JPanel admin = new JPanel();
++    boolean isAdminValid;
+     int mousePressedY;
+     static  int confirm;
+     public JLabel homeIcon = new JLabel("Home");
+@@ -297,21 +297,21 @@
+             textField = new JTextField("Admin");
+             textField.setEnabled(false);
+             validate.addActionListener(actionPerformed ->{
+-
++               // MyFrames.openDialog(this);
+                 boolean isValid = authenticateAdmin(textField.getText(),jPasswordField.getText());
+                 if(isValid) {
+                     loggedIn = true;
+                     MyFrames.showSuccessfullFrame( "You are welcome",bigWelcomeIcon,getWidth(),getHeight());
+                     adminPanel.removeAll();
+-                    //adminPanel.add(getRegisterationPanel());
+-                    adminPanel.setBackground(new Color(0x361717));
++                    adminPanel.setBackground(Color.BLACK);
+                     adminPanel.setLayout(new BorderLayout());
+                     adminPanel.add(BorderLayout.CENTER,getAdminLoggedIn());
++                    rightDuck.setBackground(Color.black);
+                     repaint();
+                     setExtendedState(Frame.MAXIMIZED_BOTH);
+-                    //repaint();
++                    repaint();
+                 }
+-                else MyFrames.showSuccessfullFrame( "Access denield!!!",bigCancleIcon,getWidth(),getHeight());
++                else{/*MyFrames.showSuccessfullFrame( "Access denield!!!",bigCancleIcon,getWidth(),getHeight());*/}
+ 
+ 
+         });
+@@ -356,8 +356,8 @@
+             });
+             validate.addActionListener(actionPerformed -> {
+ 
+-                    boolean isValid = authenticateUser(textField.getText(), jPasswordField.getText());
+-                    if (isValid) {
++                    isAdminValid = authenticateUser(textField.getText(), jPasswordField.getText());
++                    if (isAdminValid) {
+                         loggedIn = true;
+                         MyFrames.showSuccessfullFrame( "You are welcome",bigWelcomeIcon,getWidth(),getHeight());
+                         loginPanel.removeAll();
+@@ -390,32 +390,54 @@
+     }
+ 
+     private JScrollPane getAdminLoggedIn() {
+-
+         JPanel admin = new JPanel(new BorderLayout());
+         admin.setBackground(Color.black);
+ 
+         JScrollPane scroller = new JScrollPane(admin);
+-        scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+-        scroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+-        Box b = new Box(BoxLayout.Y_AXIS);
++        scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
++        Box box = new Box(BoxLayout.Y_AXIS);
+ 
+-        for(int i = 1; i<= 100 ; i++){
++        for(int i = 1; i<10; i++){
++           // b.add(Box.createRigidArea(new Dimension(950,250)));
++            box.add(getAllPayments(i));
++            // box.add(Box.createVerticalGlue());
++           // b.add(Box.createVerticalStrut(20));
++        }
+ 
+-            b.add(getAllPayments(i));
++        admin.add(BorderLayout.CENTER,box);
+ 
+-        }
+-        admin.add(BorderLayout.CENTER,b);
+-
++        //admin.add(BorderLayout.CENTER,b);
+ 
+         //TODO: create the interface for the admin panel with arrays of panels
+ 
+         return scroller;
+     }
+-    public JPanel getAllPayments(final int i){
+-        JPanel paymentpanel = new RoundEdgePanel(30,Color.white);
++
++    public JPanel getAllPayments(final int i ){
++
++        JPanel paymentpanel = new RoundEdgePanel(20,new Color(0x3B3B34));
+         paymentpanel.setLayout(null);
+-        paymentpanel.setSize(1000,500);
+-        paymentpanel.setBackground(Color.white);
++        paymentpanel.setSize(950,250);
++
++        JLabel dusbinIcon = new JLabel(dustbinIcon);
++        dusbinIcon.setBounds(850,20,25,25);
++        JLabel copyToClipIcon = new JLabel(copyToClipBoardIcon);
++        copyToClipIcon.setBounds(895,20,25,25);
++
++        User eachUser = user.get(i);
++
++        JLabel label = new JLabel(eachUser.getName());
++        label.setIcon(smallUserIcon);
++        label.setIconTextGap(15);
++        label.setHorizontalTextPosition(SwingConstants.TRAILING);
++        label.setHorizontalAlignment(SwingConstants.LEADING);
++        label.setFont(segoeUIEmoji);
++        label.setForeground(Color.gray);
++        label.setBounds(20,50,400,40);
++        //paymentpanel.add(copyToClipIcon);
++        //paymentpanel.add(dusbinIcon);
++       // paymentpanel.add(label);
++
+         return paymentpanel;
+     }
+ 
+@@ -664,14 +686,16 @@
+                 regIcon.setVisible(false);
+                 repaint();
+             });
+-            adminButton.addActionListener(actionEvent -> {cardLayout.show(mainView, "adminPanel");
++            adminButton.addActionListener(actionEvent -> {
++                cardLayout.show(mainView, "adminPanel");
+                 rightDuck.setBackground(Colors.sky);
+                 homeIcon.setVisible(false);
+                 adminIcon.setVisible(true);
+                 userIcon.setVisible(false);
+                 logoutIcon.setVisible(false);
+                 regIcon.setVisible(false);
+-
++                if(isAdminValid)
++                    //loadPayment();
+                 repaint();
+             });
+             userButton.addActionListener(actionEvent -> {cardLayout.show(mainView, "registerationPanel");
+@@ -762,6 +786,7 @@
+ 
+             adminPanel.setLayout(null);
+             JLabel label = new JLabel();
++
+             label.setText("");
+             label.setIcon(Icons.tollGateJPG);
+             label.setBounds(-100, -100, 1300, 957);
+@@ -940,7 +965,7 @@
+ 
+         return confirm;
+     }
+-    public JPanel loggedIn() {
++    public static JPanel loggedIn() {
+ 
+         JLabel carName = new JLabel("Car Brand.");
+         carName.setBounds(30, 105, 200, 20);
+@@ -1068,6 +1093,30 @@
+         return paymentPanel;
+     }
+ 
+-
++    public static void openDialog(Frame f)
++    {
++        final JDialog dialog = new JDialog(f, "a test", true);
++        dialog.setUndecorated(true);
++        final JButton button = new JButton("custom button");
++        button.addActionListener(new ActionListener()
++        {
++            public void actionPerformed(ActionEvent e)
++            {
++                System.out.println(button.getActionCommand());
++                dialog.dispose();
++            }
++        });
++        JPanel panel = new JPanel();
++        panel.add(button);
++        JButton[] buttons = { button };
++        JOptionPane optionPane = new JOptionPane(panel,
++                JOptionPane.YES_NO_OPTION,
++                JOptionPane.PLAIN_MESSAGE,
++                null, buttons, button);
++        dialog.getContentPane().add(loggedIn());
++        dialog.setSize(300,300);
++        dialog.setLocationRelativeTo(f);
++        dialog.setVisible(true);
++    }
+ 
+ }
