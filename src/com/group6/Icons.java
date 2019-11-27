@@ -28,11 +28,12 @@ class Icons {
     static final ImageIcon dayandnight = new ImageIcon("images//dayandnight.gif");
     static final ImageIcon flashLight = new ImageIcon("images//flash.gif");
     static final ImageIcon cloud1 = new ImageIcon("images//cloud1.png");
-
-
-
-
-
+    static final ImageIcon clockIcon = new ImageIcon("images//clock.png");
+    static final ImageIcon moneyIcon = new ImageIcon("images//money.png");
+    static final ImageIcon moneyInBankIcon = new ImageIcon("images//moneyInBank.png");
+    static final ImageIcon email2 = new ImageIcon("images//email2.png");
+    static final ImageIcon peopleIcon = new ImageIcon("images//people.png");
+    static final ImageIcon phoneIcon = new ImageIcon("images//phone.png");
 
 
 

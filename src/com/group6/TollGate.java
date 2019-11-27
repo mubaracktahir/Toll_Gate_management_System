@@ -105,15 +105,11 @@ public class TollGate extends  JFrame{
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 canclePanel.setBackground(Color.red);
-                MyFrames f  = new MyFrames();
-                f.showConfirmDialog("Are you sure you want to\n quit",bigAlertIcon,getWidth(),getHeight());
-
+                int n = JOptionPane.showConfirmDialog(null,"Are you sure you want to Quit ?");
                 int a = 1;
-                JOptionPane.showMessageDialog(null,""+a);
-                System.out.println();
-                if(a == 1) {
-                    System.exit(0);
+                if(n == 0 ) {
                     MyFrames.frame.dispose();
+                    System.exit(0);
                 }
             }
             @Override
@@ -417,7 +413,6 @@ public class TollGate extends  JFrame{
     }
 
     private JScrollPane getAdminLoggedIn() {
-
         admin = new JPanel();
         admin.setBackground(Color.black);
         JScrollPane scroller = new JScrollPane();
@@ -436,12 +431,15 @@ public class TollGate extends  JFrame{
         totalR.setForeground(totalR.getText().equals("0.0") ? new Color(0xFF0000): new Color(0x00F211));
         totalAmountRemit.setFont(segoeUIEmoji);
         totalR.setFont(segoeUIEmoji);
-        totalAmountRemit.setBounds(400,5,300,50);
-        totalR.setBounds(650,5,300,50);
-        totalU.setBounds(230,5,400,50);
+        totalAmountRemit.setIcon(moneyInBankIcon);
+        totalAmountRemit.setBounds(450,5,300,50);
+        totalR.setBounds(710,5,300,50);
+        totalU.setBounds(200,5,400,50);
         totalU.setForeground(lightGreen);
-        totalNumberOfUsers.setBounds(80,5,200,50);
+        totalNumberOfUsers.setBounds(20,5,200,50);
         totalNumberOfUsers.setForeground(Color.white);
+        totalNumberOfUsers.setIconTextGap(10);
+        totalNumberOfUsers.setIcon(peopleIcon);
         totalNumberOfUsers.setFont(segoeUIEmoji);
         loadPayment();
         totalR.setText(""+TollGate.totalAmountRemit);
@@ -477,6 +475,8 @@ public class TollGate extends  JFrame{
         }
     }
     public JPanel getAllPayments(final int i, int space){
+        User eachUser = user.get(i);
+
         JPanel paymentpanel = new RoundEdgePanel(25,new Color(0x3B3B34));
         paymentpanel.setLayout(null);
         paymentpanel.setSize(970,250);
@@ -485,14 +485,15 @@ public class TollGate extends  JFrame{
         dusbinIcon.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
-                user.remove(i);
-                MyFrames f = new MyFrames();
-                f.showConfirmDialog("Are you sure?",comfirmation,getWidth(),getHeight());
+                int num = JOptionPane.showConfirmDialog(null, "Remove "+eachUser.getName()+" ?","Tollgate system",2);
+                if(num == 0 )
+                    user.remove(i);
+
                 if(!(user.isEmpty())) {
+                    cardLayout.show(mainView, "adminPanel");
                     reFreshPayments();
                     refreshed = true;
                     repaint();
-                    cardLayout.show(mainView, "adminPanel");
                 }
                 else{
                     showEmptyView();
@@ -522,7 +523,6 @@ public class TollGate extends  JFrame{
         dusbinIcon.setBounds(850,20,25,25);
         JLabel copyToClipIcon = new JLabel(copyToClipBoardIcon);
         copyToClipIcon.setBounds(895,20,25,25);
-        User eachUser = user.get(i);
         JLabel num = new JLabel(""+ (i+1) +".  " + eachUser.getIdNumber());
         num.setFont(smallSegoeUIEmoji);
         num.setForeground(Color.black);
@@ -539,41 +539,43 @@ public class TollGate extends  JFrame{
 
         JLabel lastAmountPaid = new JLabel("Recent Payment:. ");
         JLabel lastA = new JLabel(""+eachUser.getLastAmountPayed());
-        lastAmountPaid.setBounds(30,100,300,40);
-        lastA.setBounds(190,100,200,40);
+        lastAmountPaid.setIcon(moneyIcon);
+        lastAmountPaid.setBounds(10,100,300,40);
+        lastA.setBounds(175,100,200,40);
 
         JLabel time = new JLabel(eachUser.getDateOfLastPayment());
-        time.setFont(smallSegoeUIEmoji);
+        time.setFont(new Font("Segoe UI Emoji",Font.PLAIN,10));
         time.setForeground(new Color(0x000000));
         time.setBounds(50,120,400,50);
+        time.setIcon(clockIcon);
+        time.setIconTextGap(10);
 
         JLabel totalAmoutPaid = new JLabel("Total Payment:. ");
         JLabel totalA = new JLabel(""+eachUser.getTotalMoneyPayed());
-        totalAmoutPaid.setBounds(350,100,300,40);
-        totalA.setBounds(490,100,200,40);
-
+        totalAmoutPaid.setBounds(310,100,300,40);
+        totalA.setBounds(465,100,200,40);
+        totalAmoutPaid.setIcon(moneyIcon);
 
         JLabel mobileNumber = new JLabel("Mobile Number:. ");
         JLabel mobileN = new JLabel(""+eachUser.getMobileNumber());
         mobileNumber.setBounds(640,100,300,40);
-        mobileN.setBounds(790,100,200,40);
-
+        mobileN.setBounds(810,100,200,40);
+        mobileNumber.setIcon(phoneIcon);
 
         JLabel emailAdress = new JLabel("Email:. ");
         JLabel emailA = new JLabel(""+eachUser.getEmail());
         emailAdress.setBounds(150,200,400,40);
         emailA.setBounds(230,200,400,40);
+        emailAdress.setIcon(email2);
 
         JLabel[] bigLabel = {totalA,mobileN,emailA,lastA};
 
         for(JLabel l: bigLabel){
             l.setFont(bigSegoeUIEmoji);
-
-             //Double d = Double.parseDouble(l.getText().trim());
             if(l.getText().trim().equals("0.0")|| l.getText().trim().equals("No number"))
                 l.setForeground(Color.red);
             else
-                l.setForeground(lightGreen);
+                l.setForeground(lightGreen2);
         }
         emailA.setForeground(orangeColor);
 
@@ -603,11 +605,10 @@ public class TollGate extends  JFrame{
     private void showEmptyView() {
         adminPanel.removeAll();
         refreshed= false;
-        //adminPanel.add(getRegisterationPanel());
         adminPanel.setBackground(new Color(0xFFFFFF));
         adminPanel.setLayout(null);
-        JLabel emptyIcon = new JLabel(Icons.emptyIcon);
 
+        JLabel emptyIcon = new JLabel(Icons.emptyIcon);
         emptyIcon.setText("Empty, No user registered!");
         emptyIcon.setFont(segoeUIEmoji);
         emptyIcon.setForeground(Color.black);
@@ -654,7 +655,7 @@ public class TollGate extends  JFrame{
         JTextField emailTextField = new JTextField("");
         emailTextField.setBounds(100,130,280,30);
 
-
+        emailTextField.addKeyListener(new DigitListener(emailTextField));
 
         JLabel heightIcon = new JLabel("Height.");
         heightIcon.setForeground(Color.WHITE);
@@ -755,14 +756,15 @@ public class TollGate extends  JFrame{
             innerRegistrationPanel.add(component);
 
         }
-        phoneTextField.addKeyListener(new DigitListener());
-        heihtTextField.addKeyListener(new DigitListener());
-        idTextField.addKeyListener(new DigitListener());
+        phoneTextField.addKeyListener(new DigitListener(this));
+        heihtTextField.addKeyListener(new DigitListener(this));
+        idTextField.addKeyListener(new DigitListener(this));
 
         register.addActionListener(action -> {
-            //user.add(new User("Mubarack Tahir","12345","Mubarack.tahir@yahoo.com",10000));
             if(emailTextField.getText().trim().equals(""))
-                MyFrames.showSuccessfullFrame("email address is required! ",bigCancleIcon,getWidth(),getHeight());
+                MyFrames.showSuccessfullFrame("Email address is required! ",bigCancleIcon,getWidth(),getHeight());
+            else if (ownersTextField.getText().trim().isEmpty())
+                MyFrames.showSuccessfullFrame("Name is required! ",bigCancleIcon,getWidth(),getHeight());
             else{
                 if(passwordField.getText().trim().equals("")||confirmPassTextField.getText().trim().equals(""))
                     MyFrames.showSuccessfullFrame("password is compulsory",bigCancleIcon,getWidth(),getHeight());
@@ -771,13 +773,10 @@ public class TollGate extends  JFrame{
                         User u = new User();
                         boolean isReg = false;
                         for (User us : user) {
-                            if (us.getEmail().equals(emailTextField.getText().trim())) {
-                                MyFrames.showSuccessfullFrame( "Email already exist!",bigCancleIcon,getWidth(),getHeight());
+                            if (us.getEmail().equals(emailTextField.getText().trim().toLowerCase()))
                                 isReg = true;
-                            }
-
-
                         }
+
                         if(!isReg){
                             u.setEmail(emailTextField.getText().trim().toLowerCase());
                             u.setPass(passwordField.getText().trim());
@@ -797,6 +796,8 @@ public class TollGate extends  JFrame{
                             totalAmountRemit += u.getTotalMoneyPayed();
 
                         }
+                        else MyFrames.showSuccessfullFrame( "Email already exist!",bigCancleIcon,getWidth(),getHeight());
+
                     } else {
                         MyFrames.showSuccessfullFrame("Password does not match",bigCancleIcon,getWidth(),getHeight());
                     }
@@ -913,9 +914,8 @@ public class TollGate extends  JFrame{
         logoutButton.addActionListener(actionEvent ->{ cardLayout.show(mainView, "logoutPanel");
             rightDuck.setBackground(Colors.brown);
             refreshed = false;
-            new  MyFrames().showConfirmDialog("are you sure you want to log Out?",bigAlertIcon,getWidth(),getHeight());
-            MyFrames f = new MyFrames();
-            if(confirm == 1){
+            int b = JOptionPane.showConfirmDialog(null, "Are you sure you want to log out?","TollGate System",2);
+            if(b == 0){
                 userIcon2.setVisible(false);
                 online.setVisible(false);
                 if(loggedIn) {
@@ -941,6 +941,10 @@ public class TollGate extends  JFrame{
                         logoutIcon.setVisible(false);
                         regIcon.setVisible(false);
                         repaint();
+                    }
+                    else {
+                        cardLayout.show(mainView,"homePanel");
+                        rightDuck.setBackground(Color.white);
                     }
                 }
             }
@@ -1146,7 +1150,7 @@ public class TollGate extends  JFrame{
                 confirm = true;
         }
 
-        return true;
+        return confirm;
     }
     public JPanel loggedIn() {
 

@@ -12,5 +12,7 @@ class Colors{
         static final Color lightTransparent = new Color(0,0,0,10);
         static final Color harshTransparent = new Color(84, 84, 84, 225);
         static  final Color lightGreen = new Color(0x44F90D);
+        static  final Color lightGreen2 = new Color(0x66F94C);
+
 
 }
