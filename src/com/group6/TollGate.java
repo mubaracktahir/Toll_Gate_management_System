@@ -417,7 +417,12 @@ public class TollGate extends  JFrame{
         admin.setBackground(Color.black);
         JScrollPane scroller = new JScrollPane();
         scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+
         Box b = new Box(BoxLayout.Y_AXIS);
+        admin.setPreferredSize(new Dimension( 1000,100000
+        ));
         b.add(Box.createVerticalStrut(20));
         b.setLocation(10,10);
         admin.setLayout(null);
@@ -448,8 +453,11 @@ public class TollGate extends  JFrame{
         admin.add(totalR);
         admin.add(totalNumberOfUsers);
         admin.repaint();
+        scroller.setBackground(Color.black);
         scroller.setViewportView(admin);
         scroller.repaint();
+        scroller.setFocusable(true);
+        scroller.setRequestFocusEnabled(true);
         return scroller;
     }
 
@@ -485,7 +493,7 @@ public class TollGate extends  JFrame{
         dusbinIcon.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
-                int num = JOptionPane.showConfirmDialog(null, "Remove "+eachUser.getName()+" ?","Tollgate system",2);
+                int num = JOptionPane.showConfirmDialog(null, "Remove \""+eachUser.getName()+"\" ?","Tollgate system",2);
                 if(num == 0 )
                     user.remove(i);
 
@@ -699,8 +707,6 @@ public class TollGate extends  JFrame{
         passwordIcon.setBounds(22,435,100,25);
         JPasswordField passwordField = new JPasswordField("padsfsdvsv");
         passwordField.setBounds(100,430,280,25);
-
-
 
         JLabel confirmPassIcon = new JLabel("Confirm.");
         confirmPassIcon.setForeground(Color.WHITE);
@@ -1355,7 +1361,4 @@ public class TollGate extends  JFrame{
             frame.repaint();
         }
     }
-
-
-
 }
