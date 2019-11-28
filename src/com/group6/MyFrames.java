@@ -142,7 +142,7 @@ public class MyFrames{
         yesBtn.setForeground(Color.white);
         yesBtn.setFocusPainted(true);
         yesBtn.addActionListener( action -> {
-            TollGate.confirm = 1;
+
             frame.dispose();
         });
         panel.add(yesBtn);
@@ -152,7 +152,6 @@ public class MyFrames{
         cancleBtn.setBounds(180,160,80,30);
         cancleBtn.setForeground(Color.white);
         cancleBtn.addActionListener( action -> {
-            TollGate.confirm = 0;
             frame.dispose();
         });
         panel.add(cancleBtn);

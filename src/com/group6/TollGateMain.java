@@ -11,8 +11,6 @@ import javax.swing.*;
         getContentPane().setLayout(null);
     }
     void setUpFrame(){
-        getContentPane().add(tollGate.rightDuck);
-        getContentPane().add(tollGate.leftDuck);
-        add(tollGate.panel1);
+        
     }
 }

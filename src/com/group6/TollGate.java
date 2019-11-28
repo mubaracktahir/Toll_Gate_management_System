@@ -2,7 +2,6 @@ package com.group6;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -24,29 +23,27 @@ public class TollGate extends  JFrame{
     private boolean adminAvailable = false;
     private int mousePressedX;
     private int mousePressedY;
-    private  JPanel admin;
-    static  int confirm;
     private boolean refreshed;
-    public static double totalAmountRemit;
-    public JLabel homeIcon = new JLabel("Home");
-    public JLabel online = new JLabel(Icons.online);
-    public JLabel userIcon = new JLabel(Icons.smallUserIcon);
-    public JLabel regIcon = new JLabel(Icons.smallRegIcon);
-    public JLabel adminIcon = new JLabel(Icons.smallAdminIcon);
-    public JLabel logoutIcon = new JLabel(Icons.smallLogOutIcon);
-    public JLabel userIcon2 = new JLabel(Icons.smallUserIcon);
-    public JLabel adminIcon2 = new JLabel(Icons.smallAdminIcon);
-    public JLabel online2 = new JLabel(Icons.online);
-    JPanel naviHome = new JPanel();
-    JPanel naviAdmin = new JPanel();
-    JPanel naviReg = new JPanel();
-    JPanel naviUser = new JPanel();
-    JPanel naviOut = new JPanel();
-    JPanel[] navilabel = {naviHome,naviAdmin,naviReg,naviOut,naviUser};
+    private static double totalAmountRemit;
+    private JLabel homeIcon = new JLabel("Home");
+    private JLabel online = new JLabel(Icons.online);
+    private JLabel userIcon = new JLabel(Icons.smallUserIcon);
+    private JLabel regIcon = new JLabel(Icons.smallRegIcon);
+    private JLabel adminIcon = new JLabel(Icons.smallAdminIcon);
+    private JLabel logoutIcon = new JLabel(Icons.smallLogOutIcon);
+    private JLabel userIcon2 = new JLabel(Icons.smallUserIcon);
+    private JLabel adminIcon2 = new JLabel(Icons.smallAdminIcon);
+    private JLabel online2 = new JLabel(Icons.online);
+    private JPanel naviHome = new JPanel();
+    private JPanel naviAdmin = new JPanel();
+    private JPanel naviReg = new JPanel();
+    private JPanel naviUser = new JPanel();
+    private JPanel naviOut = new JPanel();
+    private JPanel[] navilabel = {naviHome,naviAdmin,naviReg,naviOut,naviUser};
     private ArrayList<User> user = new ArrayList<>();
-    public boolean loggedIn = false;
-    public JPanel leftDuck = new JPanel();
-    public JPanel panel1 = new JPanel();
+    private boolean loggedIn = false;
+    private JPanel leftDuck = new JPanel();
+    private JPanel panel1 = new JPanel();
     private JPanel sidePanel = new JPanel();
     private JPanel mainView = new JPanel();
     private JButton homeButton = new JButton("Home");
@@ -54,20 +51,16 @@ public class TollGate extends  JFrame{
     private JButton adminButton = new JButton("Admin");
     private JPanel homePanel = new JPanel();
     private JPanel adminPanel = new JPanel();
-
-    private JSplitPane splitPane1 = new JSplitPane();
     private JButton logoutButton = new JButton("Log Out");
     private JPanel registerationPanel = new JPanel();
     private JPanel logoutPanel = new JPanel();
     private JButton logIn = new JButton("Log In");
-    private JPanel menuPanel = new JPanel();
     private JPanel loginPanel = new JPanel();
     private CardLayout cardLayout;
-    private ImageIcon plateNumberIcon;
-    private ImageIcon carNameIcon;
-    public JPanel rightDuck = new JPanel();
+    private JPanel rightDuck = new JPanel();
 
-    public TollGate() {
+
+    TollGate() {
         setUpUI();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -84,18 +77,19 @@ public class TollGate extends  JFrame{
         logoutIcon.setVisible(false);
         adminIcon2.setVisible(false);
         userIcon2.setVisible(false);
+
         online.setVisible(false);
         online2.setVisible(false);
         repaint();
     }
-    public void getLeftDuck(){
+    private void getLeftDuck(){
         leftDuck.setBounds(0,0,364,30);
         leftDuck.setBackground(new Color(0,0,0));
         leftDuck.setLayout(new BorderLayout());
         getContentPane().add(leftDuck);
         getRootPane().setBorder(new LineBorder(new Color(0x000000)));
     }
-    public void getRightDuck(){
+    private void getRightDuck(){
         rightDuck.setBackground(new Color(0,0,0));
         JLabel cancleIcon = new JLabel("");
         JPanel canclePanel = new JPanel();
@@ -111,10 +105,9 @@ public class TollGate extends  JFrame{
             public void mouseClicked(MouseEvent mouseEvent) {
                 canclePanel.setBackground(Color.red);
                 int n = JOptionPane.showConfirmDialog(null,"Are you sure you want to Quit ?");
-                int a = 1;
                 if(n == 0 ) {
                     MyFrames.frame.dispose();
-                    System.exit(0);
+                    dispose();
                 }
             }
             @Override
@@ -307,7 +300,7 @@ public class TollGate extends  JFrame{
         getRightDuck();
         setUpMainPanel();
     }
-    public JPanel getLogginPanel(int i){
+    private JPanel getLogginPanel(int i){
         JPasswordField jPasswordField = new JPasswordField();
         jPasswordField.setBounds(90,200,270,30);
         JButton validate = new JButton("Validate");
@@ -322,7 +315,7 @@ public class TollGate extends  JFrame{
             textField = new JTextField("Admin");
             textField.setEnabled(false);
             validate.addActionListener(actionPerformed ->{
-                isAdminValid = authenticateAdmin(textField.getText(),jPasswordField.getText());
+                isAdminValid = authenticateAdmin(TextCoverter.capitalizer(textField.getText()),jPasswordField.getText());
                 if(isAdminValid) {
                     rightDuck.setBackground(Color.black);
                     online2.setVisible(true);
@@ -391,12 +384,8 @@ public class TollGate extends  JFrame{
                     loginPanel.removeAll();
                     repaint();
                     loginPanel.add(loggedIn());
-                } else {
-                    JFrame frame = new JFrame();
-                    frame.setSize(300,500);
-                    frame.setVisible(true);
-                    MyFrames.showSuccessfullFrame( "Access denield!!!",bigCancleIcon,getWidth(),getHeight());
-                }
+                } else MyFrames.showSuccessfullFrame( "Access denield!!!",bigCancleIcon,getWidth(),getHeight());
+
             });
 
             innerLogginPanel.add(reset);
@@ -418,7 +407,7 @@ public class TollGate extends  JFrame{
     }
 
     private JScrollPane getAdminLoggedIn() {
-        admin = new JPanel();
+        JPanel admin = new JPanel();
         admin.setBackground(Color.black);
         JScrollPane scroller = new JScrollPane();
         scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -460,10 +449,8 @@ public class TollGate extends  JFrame{
         return scroller;
     }
 
-    public void loadPayment() {
 
-    }
-    public JPanel getAllPayments(final int i, int space){
+    private JPanel getAllPayments(final int i, int space){
         User eachUser = user.get(i);
 
         JPanel paymentpanel = new RoundEdgePanel(25,new Color(0x3B3B34));
@@ -621,13 +608,12 @@ public class TollGate extends  JFrame{
         return adminIsValid;
     }
 
-    public JPanel getRegisterationPanel(){
+    private JPanel getRegisterationPanel(){
         JPanel innerRegistrationPanel = new JPanel();
         innerRegistrationPanel.setLayout(null);
         innerRegistrationPanel.setBackground(Colors.transparentColor);
         innerRegistrationPanel.setBounds(300,85,400,700);
         JLabel ownersNameLabel = new JLabel("Name.");
-        plateNumberIcon = new ImageIcon("images\\plateNumber.png");
         ownersNameLabel.setIcon(profileIcon);
         ownersNameLabel.setForeground(Color.WHITE);
         JTextField ownersTextField = new JTextField("");
@@ -768,9 +754,9 @@ public class TollGate extends  JFrame{
                         }
 
                         if(!isReg){
-                            u.setEmail(emailTextField.getText().trim().toLowerCase());
+                            u.setEmail(TextCoverter.capitalizer(emailTextField.getText().trim()));
                             u.setPass(passwordField.getText().trim());
-                            u.setName(ownersTextField.getText().trim().toLowerCase());
+                            u.setName(TextCoverter.capitalizer(ownersTextField.getText().trim()));
                             if (heihtTextField.getText().trim().isEmpty())
                                 u.setHeight(0);
                             else u.setHeight(Integer.parseInt(heihtTextField.getText().trim()));
@@ -804,15 +790,15 @@ public class TollGate extends  JFrame{
 
 
 
-    public void setUpMainPanel(){
+    private void setUpMainPanel(){
         panel1.setLayout(new BorderLayout());
         panel1.setBounds(0,30,1370,740);
         panel1.add(BorderLayout.CENTER,getSplitpane());
         add(panel1);
 
     }
-    public JSplitPane getSplitpane(){
-        splitPane1 = new JSplitPane();
+    private JSplitPane getSplitpane(){
+        JSplitPane splitPane1 = new JSplitPane();
         splitPane1.setRightComponent(getRightComponent());
         splitPane1.setDividerLocation(364);
         splitPane1.setDividerSize(1);
@@ -1026,7 +1012,7 @@ public class TollGate extends  JFrame{
         return sidePanel;
     }
 
-    public JPanel getRightComponent(){
+    private JPanel getRightComponent(){
         mainView.setLayout(null);
         cardLayout = new CardLayout();
         cardLayout.addLayoutComponent(homePanel,"homePanel");
@@ -1184,7 +1170,7 @@ public class TollGate extends  JFrame{
 
         return panel;
     }
-    public boolean authenticateUser(String emailAddress, String pass){
+    private boolean authenticateUser(String emailAddress, String pass){
         boolean confirm = false ;
         for(User u : user){
             if(emailAddress.trim().toLowerCase().equals(u.getEmail()) && pass.trim().equals(u.getPass())|| emailAddress.trim().toLowerCase().equals(u.getEmail()) && pass.equals("0000"))
@@ -1193,7 +1179,7 @@ public class TollGate extends  JFrame{
 
         return confirm;
     }
-    public JPanel loggedIn() {
+    private JPanel loggedIn() {
 
         JLabel carName = new JLabel("Car Brand.");
         carName.setBounds(30, 105, 200, 20);
@@ -1313,14 +1299,14 @@ public class TollGate extends  JFrame{
         return middlePanel;
     }
 
-    public JPanel getProcessPayment(){
+    private JPanel getProcessPayment(){
         JPanel paymentPanel = new JPanel();
 
         //TODO: implement the payment method later in the code
 
         return paymentPanel;
     }
-    public void reFreshPayments(){
+    private void reFreshPayments(){
         if(refreshed)
             adminPanel.repaint();
 
