@@ -37,7 +37,12 @@ public class TollGate extends  JFrame{
     public JLabel userIcon2 = new JLabel(Icons.smallUserIcon);
     public JLabel adminIcon2 = new JLabel(Icons.smallAdminIcon);
     public JLabel online2 = new JLabel(Icons.online);
-
+    JPanel naviHome = new JPanel();
+    JPanel naviAdmin = new JPanel();
+    JPanel naviReg = new JPanel();
+    JPanel naviUser = new JPanel();
+    JPanel naviOut = new JPanel();
+    JPanel[] navilabel = {naviHome,naviAdmin,naviReg,naviOut,naviUser};
     private ArrayList<User> user = new ArrayList<>();
     public boolean loggedIn = false;
     public JPanel leftDuck = new JPanel();
@@ -419,40 +424,34 @@ public class TollGate extends  JFrame{
         scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         scroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-
         Box b = new Box(BoxLayout.Y_AXIS);
-        admin.setPreferredSize(new Dimension( 1000,100000
-        ));
+
         b.add(Box.createVerticalStrut(20));
         b.setLocation(10,10);
         admin.setLayout(null);
+        adminPanel.setBorder(null);
 
-        JLabel totalNumberOfUsers = new JLabel("Total users:. ");
-        JLabel totalU = new JLabel(""+user.size());
-        totalU.setFont(segoeUIEmoji);
-        JLabel totalAmountRemit = new JLabel("Money In Bank:. N");
-        totalAmountRemit.setForeground(Color.white);
-        JLabel totalR = new JLabel();
-        totalR.setForeground(totalR.getText().equals("0.0") ? new Color(0xFF0000): new Color(0x00F211));
-        totalAmountRemit.setFont(segoeUIEmoji);
-        totalR.setFont(segoeUIEmoji);
-        totalAmountRemit.setIcon(moneyInBankIcon);
-        totalAmountRemit.setBounds(450,5,300,50);
-        totalR.setBounds(710,5,300,50);
-        totalU.setBounds(200,5,400,50);
-        totalU.setForeground(lightGreen);
-        totalNumberOfUsers.setBounds(20,5,200,50);
-        totalNumberOfUsers.setForeground(Color.white);
-        totalNumberOfUsers.setIconTextGap(10);
-        totalNumberOfUsers.setIcon(peopleIcon);
-        totalNumberOfUsers.setFont(segoeUIEmoji);
-        loadPayment();
-        totalR.setText(""+TollGate.totalAmountRemit);
-        admin.add(totalU);
-        admin.add(totalAmountRemit);
-        admin.add(totalR);
-        admin.add(totalNumberOfUsers);
-        admin.repaint();
+
+        int k = 10;
+        int sum =0;
+        int j = 0;
+        for(int i = 0; i< user.size() ; i++) {
+            if (k == 10) {
+                admin.add(getAllPayments(i, k));
+                k = 0;
+            } else {
+                if (j == 0) {
+
+                    sum = sum + 270;
+                    admin.add(getAllPayments(i, sum));
+                    j = 1;
+                } else {
+                    sum = sum + 260;
+                    admin.add(getAllPayments(i, sum));
+                    admin.setPreferredSize(new Dimension( 1000,290+sum));
+                }
+            }
+        }
         scroller.setBackground(Color.black);
         scroller.setViewportView(admin);
         scroller.repaint();
@@ -462,25 +461,7 @@ public class TollGate extends  JFrame{
     }
 
     public void loadPayment() {
-        int k = 60;
-        int sum =0;
-        int j = 0;
-        for(int i = 0; i< user.size() ; i++) {
-            if (k == 60) {
-                admin.add(getAllPayments(i, k));
-                k = 0;
-            } else {
-                if (j == 0) {
 
-                    sum = sum + 330;
-                    admin.add(getAllPayments(i, sum));
-                    j = 1;
-                } else {
-                    sum = sum + 270;
-                    admin.add(getAllPayments(i, sum));
-                }
-            }
-        }
     }
     public JPanel getAllPayments(final int i, int space){
         User eachUser = user.get(i);
@@ -724,6 +705,9 @@ public class TollGate extends  JFrame{
                 alreadyLabel.setBackground(Color.pink);
                 cardLayout.show(mainView,"loginPanel");
                 rightDuck.setBackground(Colors.pink);
+                for (JPanel p: navilabel)
+                    p.setVisible(false);
+                naviUser.setVisible(true);
                 repaint();
             }
 
@@ -836,37 +820,53 @@ public class TollGate extends  JFrame{
         splitPane1.setMaximumSize(getMaximumSize());
         splitPane1.setMaximumSize(Dimen.SPLIT_MENU_SIZE);
         splitPane1.setLeftComponent(getLeftComponent());
+        splitPane1.setBorder(null);
         return splitPane1;
     }
 
     private JPanel getLeftComponent() {
         //set the bounds of buttons
-        homeButton.setBounds(0,130,364,80);
+
+        for (JPanel p : navilabel){
+            p.setVisible(false);
+        }
+        naviHome.setVisible(true);
+        homeButton.setBounds(10,130,354,80);
+        naviHome.setBounds(0,130,5,80);
+
         homeButton.setIcon(new ImageIcon("images//home2.png"));
 
-        adminButton.setBounds(0,240,364,80);
+        adminButton.setBounds(10,240,354,80);
+        naviAdmin.setBounds(0,240,5,80);
         adminButton.setIcon(new ImageIcon("images//admin.png"));
 
-        userButton.setBounds(0,340,364,80);
+        userButton.setBounds(10,340,354,80);
+        naviReg.setBounds(0,340,5,80);
         userButton.setIcon(new ImageIcon("images//register.png"));
 
-        logIn.setBounds(0,440,364,80);
+        logIn.setBounds(10,440,354,80);
+        naviUser.setBounds(0,440,5,80);
         logIn.setIcon(new ImageIcon("images//user.png"));
 
-        logoutButton.setBounds(0,540,364,80);
+        logoutButton.setBounds(10,540,354,80);
+        naviOut.setBounds(0,540,5,80);
         logoutButton.setIcon(new ImageIcon("images//logout.png"));
 
         //button properties
         JButton[] buttons = {homeButton,adminButton,logoutButton,userButton,logIn};
         for(JButton btn : buttons){
-            btn.setBackground(Color.black);
-            btn.setForeground(Color.WHITE);
-            btn.setContentAreaFilled(true);
-            btn.setBorderPainted(false);
-            btn.setFont(new Font("Segoe UI Emoji",Font.PLAIN,28));
-            btn.setHorizontalTextPosition(SwingConstants.TRAILING);
-            btn.setHorizontalAlignment(SwingConstants.LEADING);
-            btn.setIconTextGap(34);
+
+                btn.setBackground(Color.black);
+                btn.setForeground(Color.WHITE);
+                btn.setContentAreaFilled(true);
+                btn.setBorderPainted(false);
+                btn.setFocusPainted(false);
+                btn.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 28));
+                btn.setHorizontalTextPosition(SwingConstants.TRAILING);
+                btn.setHorizontalAlignment(SwingConstants.LEADING);
+                btn.setIconTextGap(34);
+
+
         }
 
         //sidePanel and menu button listener panel
@@ -874,6 +874,10 @@ public class TollGate extends  JFrame{
 
         homeButton.addActionListener(action -> {
             repaint();
+            for (JPanel p : navilabel){
+                p.setVisible(false);
+            }
+            naviHome.setVisible(true);
             refreshed = false;
             cardLayout.show(mainView, "homePanel");
             rightDuck.setBackground(new Color(0,0,0));
@@ -885,6 +889,10 @@ public class TollGate extends  JFrame{
             repaint();
         });
         adminButton.addActionListener(actionEvent -> {cardLayout.show(mainView, "adminPanel");
+            for (JPanel p : navilabel){
+                p.setVisible(false);
+            }
+            naviAdmin.setVisible(true);
             if(!adminAvailable)
                 rightDuck.setBackground(Colors.sky);
             else
@@ -913,13 +921,22 @@ public class TollGate extends  JFrame{
             adminIcon.setVisible(false);
             userIcon.setVisible(false);
             logoutIcon.setVisible(false);
+            for (JPanel p : navilabel){
+                p.setVisible(false);
+            }
+            naviReg.setVisible(true);
             refreshed = false;
+
             regIcon.setVisible(true);
             repaint();
         });
         logoutButton.addActionListener(actionEvent ->{ cardLayout.show(mainView, "logoutPanel");
             rightDuck.setBackground(Colors.brown);
             refreshed = false;
+            for (JPanel p : navilabel){
+                p.setVisible(false);
+            }
+            naviOut.setVisible(true);
             int b = JOptionPane.showConfirmDialog(null, "Are you sure you want to log out?","TollGate System",2);
             if(b == 0){
                 userIcon2.setVisible(false);
@@ -933,16 +950,21 @@ public class TollGate extends  JFrame{
                     homeIcon.setVisible(false);
                     adminIcon.setVisible(false);
                     userIcon.setVisible(true);
+                    //naviUser.setVisible(true);
                     logoutIcon.setVisible(false);
                     regIcon.setVisible(false);
                     repaint();
                 }else{
                     int r = JOptionPane.showConfirmDialog(null,"You are not yet Logged in\nLog in ?","Log out -Toll Gate",1,2);
                     if (r == 0){
+                        for (JPanel p: navilabel)
+                            p.setVisible(false);
+                        naviUser.setVisible(true);
                         cardLayout.show(mainView,"loginPanel");
                         rightDuck.setBackground(new Colors().pink);
                         homeIcon.setVisible(false);
                         adminIcon.setVisible(false);
+                       // naviUser.setVisible(true);
                         userIcon.setVisible(true);
                         logoutIcon.setVisible(false);
                         regIcon.setVisible(false);
@@ -953,6 +975,7 @@ public class TollGate extends  JFrame{
                         rightDuck.setBackground(Color.white);
                     }
                 }
+
             }
             else
             {
@@ -965,10 +988,19 @@ public class TollGate extends  JFrame{
                 rightDuck.setBackground(new Color(0,0,0));
                 repaint();
             }
+            for (JPanel p : navilabel){
+                p.setVisible(false);
+            }
+            naviHome.setVisible(true);
+
             repaint();
         });
         logIn.addActionListener(actionPerformed -> {
             refreshed = false;
+            for (JPanel p : navilabel){
+                p.setVisible(false);
+            }
+            naviUser.setVisible(true);
             cardLayout.show(mainView, "loginPanel");
             rightDuck.setBackground(Colors.pink);
             homeIcon.setVisible(false);
@@ -980,7 +1012,11 @@ public class TollGate extends  JFrame{
         });
 
         sidePanel.setLayout(null);
-
+        sidePanel.add(naviOut);
+        sidePanel.add(naviUser);
+        sidePanel.add(naviReg);
+        sidePanel.add(naviAdmin);
+        sidePanel.add(naviHome);
         sidePanel.add(homeButton);
         sidePanel.add(userButton);
         sidePanel.add(logoutButton);
@@ -1146,7 +1182,6 @@ public class TollGate extends  JFrame{
         }
         report.addMouseListener(new HomePanelBottomDuckListener(labels,this));
 
-
         return panel;
     }
     public boolean authenticateUser(String emailAddress, String pass){
@@ -1253,14 +1288,14 @@ public class TollGate extends  JFrame{
         btn.setBackground(new Color(0x44F90D));
         btn.setBounds(110, 610, 420, 40);
         btn.addActionListener(actionPerformed -> {
-
+            MyFrames myFrames = new MyFrames();
+            myFrames.showProcessDialog();
         });
         middlePanel.add(btn);
         middlePanel.add(payment);
         middlePanel.setBackground(new Color(0,0,0,253));
         middlePanel.setBounds(220, 50, 600, 1000);
         middlePanel.setLayout(null);
-
         middlePanel.add(carName);
         middlePanel.add(plateNumber);
         middlePanel.add(plateText);
@@ -1292,9 +1327,40 @@ public class TollGate extends  JFrame{
         else {
             loggedIn = true;
             adminPanel.removeAll();
-            adminPanel.setLayout(new BorderLayout());
+            adminPanel.setLayout(null);
+            adminPanel.setBackground(Color.black);
             rightDuck.setBackground(Color.black);
-            adminPanel.add(getAdminLoggedIn(), BorderLayout.CENTER);
+            JLabel totalNumberOfUsers = new JLabel("Total users:. ");
+            JLabel totalU = new JLabel(""+user.size());
+            totalU.setFont(segoeUIEmoji);
+            JLabel totalAmountRemit = new JLabel("Money In Bank:. N");
+            totalAmountRemit.setForeground(Color.white);
+            JLabel totalR = new JLabel();
+            totalR.setForeground(totalR.getText().equals("0.0") ? new Color(0xFF0000): new Color(0x00F211));
+            totalAmountRemit.setFont(segoeUIEmoji);
+            totalR.setFont(segoeUIEmoji);
+            totalAmountRemit.setIcon(moneyInBankIcon);
+            totalAmountRemit.setBounds(450,5,300,50);
+            totalR.setBounds(710,5,300,50);
+            totalU.setBounds(200,5,400,50);
+            totalU.setForeground(lightGreen);
+            totalNumberOfUsers.setBounds(20,5,200,50);
+            totalNumberOfUsers.setForeground(Color.white);
+            totalNumberOfUsers.setIconTextGap(10);
+            totalNumberOfUsers.setIcon(peopleIcon);
+            totalNumberOfUsers.setFont(segoeUIEmoji);
+            totalR.setText(""+TollGate.totalAmountRemit);
+
+            JScrollPane scrollPane = getAdminLoggedIn();
+            scrollPane.setBorder(null);
+
+            scrollPane.setBounds(0,70,1000,700);
+            adminPanel.add(totalAmountRemit);
+            adminPanel.add(totalNumberOfUsers);
+            adminPanel.add(totalR);
+            adminPanel.add(totalU);
+            adminPanel.add(scrollPane, BorderLayout.CENTER);
+
 
             setExtendedState(Frame.MAXIMIZED_BOTH);
             repaint();
@@ -1310,7 +1376,6 @@ public class TollGate extends  JFrame{
         public HomePanelBottomDuckListener(JLabel[] labels, JFrame frame) {
             this.labels = labels;
             this.frame = frame;
-
         }
 
         @Override
@@ -1319,6 +1384,9 @@ public class TollGate extends  JFrame{
                 labels[0].setForeground(new Color(0xEDD38C));
                 cardLayout.show(mainView,"loginPanel");
                 rightDuck.setBackground(new Colors().pink);
+                for (JPanel p: navilabel)
+                    p.setVisible(false);
+                naviUser.setVisible(true);
                 repaint();
             }
         }
@@ -1357,7 +1425,6 @@ public class TollGate extends  JFrame{
             for(int i = 0; i<=7 ; i++)
                 if (mouseEvent.getSource() == labels[i])
                     labels[i].setForeground(new Color(0xEDD38C));
-
             frame.repaint();
         }
     }

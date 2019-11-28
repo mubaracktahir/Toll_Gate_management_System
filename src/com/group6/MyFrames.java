@@ -211,7 +211,7 @@ public class MyFrames{
     int v = 2;
     public   void showProcessDialog(){
         frame = new JFrame();
-       // frame.setSize(300,200);
+
         frame.setBounds(525,300,300,200);
         frame.setUndecorated(true);
         frame.setBackground(new Color(0,0,0,0));
@@ -266,7 +266,7 @@ public class MyFrames{
 
     }
 
-    private  JPanel getProcessDialog() {
+    public   JPanel getProcessDialog() {
 
         JPanel panel = new RoundEdgePanel(30,Color.black);
         panel.setLayout(null);
