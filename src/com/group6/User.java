@@ -4,14 +4,6 @@ public class User {
     private String name;
     private String pass;
     private  String email;
-
-    public User(String name, String pass, String email,int lastAmountPayed) {
-        this.name = name;
-        this.pass = pass;
-        this.email = email;
-        this.lastAmountPayed = lastAmountPayed;
-    }
-
     private double totalMoneyPayed;
     private double lastAmountPayed;
     private String dateOfLastPayment;
@@ -117,9 +109,10 @@ public class User {
         return lastAmountPayed;
     }
 
-    public void setLastAmountPayed(int lastAmountPayed) {
+    public void setLastAmountPayed(Double lastAmountPayed,int requestCode) {
+        if(requestCode == 0)
+            this.totalMoneyPayed = this.totalMoneyPayed + lastAmountPayed;
         this.lastAmountPayed = lastAmountPayed;
-        totalMoneyPayed = totalMoneyPayed + lastAmountPayed;
     }
 
     public double getTotalMoneyPayed() {
@@ -127,7 +120,7 @@ public class User {
         return totalMoneyPayed;
     }
 
-    public void setTotalMoneyPayed(int totalMoneyPayed) {
+    public void setTotalMoneyPayed(Double totalMoneyPayed) {
         this.totalMoneyPayed = totalMoneyPayed ;
     }
 }

@@ -2,7 +2,7 @@ package com.group6;
 
 public class TextCoverter {
 
-    public static String capitalizer(String str){
+    public static String convertEveryFirstLetterToUpperCase(String str){
 
         String result="";
 
